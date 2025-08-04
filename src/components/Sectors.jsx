@@ -61,8 +61,8 @@ export default function AlternatingSectorsWithColoredHeadings() {
   const gradient = "linear-gradient(to bottom, #2563eb, #60a5fa, #6ee7b7)";
 
   return (
-    <div className="relative max-w-6xl mx-auto py-20">
-      {/* Responsive vertical line */}
+    <div className="relative max-w-6xl mx-auto py-20 px-4">
+      {/* Vertical progress line */}
       <div className="absolute top-0 left-4 md:left-1/2 transform translate-x-0 md:-translate-x-1/2 h-full w-1 bg-gray-300 rounded-full z-0 overflow-hidden">
         <div
           className="w-full rounded-full transition-all duration-700"
@@ -73,46 +73,35 @@ export default function AlternatingSectorsWithColoredHeadings() {
         />
       </div>
 
-      <div className="space-y-40 relative z-10">
-        {sectors.map((sector, index) => {
-          const even = index % 2 === 0;
-          const mt = index === 1 ? "md:mt-[-25vh]" : "";
-          return (
-            <section
-              key={sector.title}
-              ref={(el) => (sectionsRef.current[index] = el)}
-              data-index={index}
-              className={`grid grid-cols-1 md:grid-cols-2 gap-10 items-center relative pl-10 md:pl-0 ${mt}`}
-              style={{ minHeight: "500px" }}
+      <div className="space-y-32 relative z-10">
+        {sectors.map((sector, index) => (
+          <section
+            key={sector.title}
+            ref={(el) => (sectionsRef.current[index] = el)}
+            data-index={index}
+            className={`grid grid-cols-1 md:grid-cols-2 gap-10 items-center pl-10 md:pl-0`}
+            style={{ minHeight: "500px" }}
+          >
+            {/* Image always on top in mobile; alternates on desktop */}
+            <div
+              className={`${
+                index % 2 !== 0 ? "md:order-last" : ""
+              } w-full max-h-[380px]`}
             >
-              {even ? (
-                <img
-                  src={sector.imgUrl}
-                  alt={sector.title}
-                  className="w-full max-h-[380px] object-contain rounded-lg transition-transform duration-300 hover:scale-105"
-                  style={{ filter: "none", boxShadow: "none" }}
-                />
-              ) : null}
-              <div className="p-6 bg-white rounded-lg border border-gray-200 text-gray-700">
-                <h2
-                  className={`text-3xl font-semibold mb-4 ${sector.headingClass}`}
-                >
-                  {sector.title}
-                </h2>
-                <p className="text-lg font-normal mb-2">{sector.description}</p>
-                <p className="text-base">{sector.extra}</p>
-              </div>
-              {!even ? (
-                <img
-                  src={sector.imgUrl}
-                  alt={sector.title}
-                  className="w-full max-h-[380px] object-contain rounded-lg transition-transform duration-300 hover:scale-105"
-                  style={{ filter: "none", boxShadow: "none" }}
-                />
-              ) : null}
-            </section>
-          );
-        })}
+              <img
+                src={sector.imgUrl}
+                alt={sector.title}
+                className="w-full h-full object-contain rounded-lg transition-transform duration-300 hover:scale-105"
+              />
+            </div>
+
+            <div className="p-6 bg-white rounded-lg border border-gray-200 text-gray-700">
+              <h2 className={`${sector.headingClass}`}>{sector.title}</h2>
+              <p className="text-lg font-normal mb-2">{sector.description}</p>
+              <p className="text-base">{sector.extra}</p>
+            </div>
+          </section>
+        ))}
       </div>
     </div>
   );
