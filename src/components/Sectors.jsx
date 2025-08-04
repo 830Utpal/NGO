@@ -8,7 +8,7 @@ const sectors = [
       "Providing quality education and resources to underserved communities. We build schools, train teachers, distribute books, and mentor students to empower the next generation.",
     extra:
       "Our programs also focus on digital literacy, scholarship opportunities, and lifelong learning initiatives for all ages.",
-    headingClass: "text-blue-900 text-3xl text-center font-semibold mb-4"
+    headingClass: "text-blue-900 text-3xl text-center font-semibold mb-4",
   },
   {
     title: "Health",
@@ -17,7 +17,7 @@ const sectors = [
       "Healthcare access, awareness campaigns, and wellness programs for all ages. From immunization drives to mental health support, we care for whole communities.",
     extra:
       "Our health outreach includes mobile clinics, nutrition education, maternal and child health, and preventive care.",
-    headingClass: "text-blue-500 text-3xl text-center font-semibold mb-4"
+    headingClass: "text-blue-500 text-3xl text-center font-semibold mb-4",
   },
   {
     title: "Environment",
@@ -26,7 +26,7 @@ const sectors = [
       "Promoting environmental sustainability through conservation efforts, clean energy projects, tree planting campaigns, and education on climate change.",
     extra:
       "We engage communities in sustainable farming, waste reduction, water conservation, and renewable energy adoption.",
-    headingClass: "text-green-600 text-3xl text-center font-semibold mb-4"
+    headingClass: "text-green-600 text-3xl text-center font-semibold mb-4",
   },
 ];
 
@@ -41,7 +41,7 @@ export default function AlternatingSectorsWithColoredHeadings() {
       threshold: 0,
     };
     const observer = new window.IntersectionObserver((entries) => {
-      entries.forEach(entry => {
+      entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const index = Number(entry.target.getAttribute("data-index"));
           setActiveIndex(index);
@@ -58,13 +58,12 @@ export default function AlternatingSectorsWithColoredHeadings() {
     };
   }, []);
 
-  // Build a vertical gradient for the colored fill
   const gradient = "linear-gradient(to bottom, #2563eb, #60a5fa, #6ee7b7)";
 
   return (
     <div className="relative max-w-6xl mx-auto py-20">
-      {/* Vertical line in the middle */}
-      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-300 rounded-full z-0 overflow-hidden">
+      {/* Responsive vertical line */}
+      <div className="absolute top-0 left-4 md:left-1/2 transform translate-x-0 md:-translate-x-1/2 h-full w-1 bg-gray-300 rounded-full z-0 overflow-hidden">
         <div
           className="w-full rounded-full transition-all duration-700"
           style={{
@@ -81,9 +80,9 @@ export default function AlternatingSectorsWithColoredHeadings() {
           return (
             <section
               key={sector.title}
-              ref={el => (sectionsRef.current[index] = el)}
+              ref={(el) => (sectionsRef.current[index] = el)}
               data-index={index}
-              className={`grid grid-cols-1 md:grid-cols-2 gap-10 items-center ${mt}`}
+              className={`grid grid-cols-1 md:grid-cols-2 gap-10 items-center relative pl-10 md:pl-0 ${mt}`}
               style={{ minHeight: "500px" }}
             >
               {even ? (
@@ -95,7 +94,11 @@ export default function AlternatingSectorsWithColoredHeadings() {
                 />
               ) : null}
               <div className="p-6 bg-white rounded-lg border border-gray-200 text-gray-700">
-                <h2 className={`text-3xl font-semibold mb-4 ${sector.headingClass}`}>{sector.title}</h2>
+                <h2
+                  className={`text-3xl font-semibold mb-4 ${sector.headingClass}`}
+                >
+                  {sector.title}
+                </h2>
                 <p className="text-lg font-normal mb-2">{sector.description}</p>
                 <p className="text-base">{sector.extra}</p>
               </div>

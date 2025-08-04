@@ -15,9 +15,21 @@ const teamMembers = [
 
 export default function Team() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const cardsPerView = 3;
+  const [cardsPerView, setCardsPerView] = useState(3);
 
-  // Optional: auto-scroll
+  useEffect(() => {
+    const updateCardsPerView = () => {
+      const width = window.innerWidth;
+      if (width < 640) setCardsPerView(1);
+      else if (width < 1024) setCardsPerView(2);
+      else setCardsPerView(3);
+    };
+
+    updateCardsPerView();
+    window.addEventListener('resize', updateCardsPerView);
+    return () => window.removeEventListener('resize', updateCardsPerView);
+  }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((idx) => (idx + 1) % teamMembers.length);
@@ -25,10 +37,11 @@ export default function Team() {
     return () => clearInterval(interval);
   }, []);
 
-  const prev = () => setCurrentIndex((currentIndex - 1 + teamMembers.length) % teamMembers.length);
-  const next = () => setCurrentIndex((currentIndex + 1) % teamMembers.length);
+  const prev = () =>
+    setCurrentIndex((prev) => (prev - 1 + teamMembers.length) % teamMembers.length);
+  const next = () =>
+    setCurrentIndex((prev) => (prev + 1) % teamMembers.length);
 
-  // Infinite scroll logic
   const displayedMembers = [];
   for (let i = 0; i < cardsPerView; i++) {
     displayedMembers.push(teamMembers[(currentIndex + i) % teamMembers.length]);
@@ -36,26 +49,29 @@ export default function Team() {
 
   return (
     <section id="team" className="py-20 px-4 max-w-7xl mx-auto">
-      <h2 className="text-4xl font-bold mb-8 text-center">Meet Our Team</h2>
+      <h2 className="text-4xl font-bold mb-10 text-center">Meet Our Team</h2>
       <div className="relative flex justify-center items-center">
         <button
           onClick={prev}
           aria-label="Previous"
-          className="absolute left-0 z-10 top-1/2 -translate-y-1/2 bg-gray-300 hover:bg-gray-400 rounded-full p-3 shadow"
+          className="absolute left-0 z-10 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-3 shadow transition"
         >
           &#8592;
         </button>
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1 overflow-hidden space-x-4 px-8">
           {displayedMembers.map((member, index) => (
-            <div key={index} className="flex-shrink-0 w-full md:w-1/3 px-4">
-              <div className="bg-white rounded-xl shadow-lg p-8 text-center h-full flex flex-col items-center justify-center transition-all duration-500">
+            <div
+              key={index}
+              className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 transition-transform duration-500"
+            >
+              <div className="bg-white rounded-xl shadow-lg p-6 text-center h-full flex flex-col items-center justify-center">
                 <img
                   src={member.imgUrl}
                   alt={member.name}
-                  className="w-32 h-32 rounded-full mb-4 object-cover border-4 border-gray-200"
+                  className="w-28 h-28 sm:w-32 sm:h-32 rounded-full mb-4 object-cover border-4 border-gray-200"
                 />
-                <h3 className="font-semibold text-2xl mb-2">{member.name}</h3>
-                <p className="text-gray-600 text-lg">{member.role}</p>
+                <h3 className="font-semibold text-xl sm:text-2xl mb-1">{member.name}</h3>
+                <p className="text-gray-600 text-sm sm:text-lg">{member.role}</p>
               </div>
             </div>
           ))}
@@ -63,7 +79,7 @@ export default function Team() {
         <button
           onClick={next}
           aria-label="Next"
-          className="absolute right-0 z-10 top-1/2 -translate-y-1/2 bg-gray-300 hover:bg-gray-400 rounded-full p-3 shadow"
+          className="absolute right-0 z-10 top-1/2 -translate-y-1/2 bg-gray-200 hover:bg-gray-300 rounded-full p-3 shadow transition"
         >
           &#8594;
         </button>
